@@ -11,8 +11,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import scala.collection.parallel.ParIterableLike;
 import scala.xml.dtd.ELEMENTS;
@@ -24,6 +26,7 @@ public class ChmMain
 {
     public static final String MODID = "chm";
     public static final String VERSION = "0.1";
+    public static int xPos = 0,yPos = 0;
     public Minecraft mc = Minecraft.getMinecraft();
 
     @EventHandler
@@ -33,11 +36,16 @@ public class ChmMain
     }
 
     @SubscribeEvent
+    public void onKey(InputEvent.KeyInputEvent event) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_U))mc.displayGuiScreen(new ChmCustomizationMenu());
+    }
+
+    @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Pre event) {
         if (IsTypeAcceoted(event.type)) {
             ScaledResolution sr = new ScaledResolution(mc);
             GlStateManager.pushMatrix();
-            GL11.glTranslated(0, -sr.getScaledWidth()/2, 0);
+            GL11.glTranslated(xPos,yPos, 0);
         }
     }
 
